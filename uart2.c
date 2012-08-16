@@ -37,10 +37,10 @@ void UART2_Config(void)
 	
 	IFS1bits.U2TXIF = 0;
 	IEC1bits.U2TXIE = 1;				// UART2 Transmitter Interrupt Enable
-	IPC7bits.U2TXIP = 4;				// mid-range interrupt priority
+	IPC7bits.U2TXIP = 3;				// mid-range interrupt priority
 	IFS1bits.U2RXIF = 0;
 	IEC1bits.U2RXIE = 1;				// UART2 Receiver Interrupt Enable
-	IPC7bits.U2RXIP = 4;				// mid-range interrupt priority
+	IPC7bits.U2RXIP = 3;				// mid-range interrupt priority
 	IEC4bits.U2EIE = 0;				// UART2 Error Interrupt Enable
 	
 	U2STAbits.OERR=0;

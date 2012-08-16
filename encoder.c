@@ -44,7 +44,7 @@ void ENC_Config()
 	MAX1CNT = ENC_RES;
 
 				
-	_QEI1IP = 7;			// QEI1 Interrupt Priority High
+//	_QEI1IP = //;			// QEI1 Interrupt Priority High
 	IFS3bits.QEI1IF = 0;	// QEI1 Interrupt Flag
 	IEC3bits.QEI1IE = 0;	// QEI1 Interrupt Enable
 	

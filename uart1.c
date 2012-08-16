@@ -32,6 +32,7 @@ extern uint8_t standardStatusTxBytes2;
 const uint8_t StandardStatusCommArray[]	= {NF_COMMAND_ReadDrivesPosition, NF_COMMAND_ReadDrivesCurrent, NF_COMMAND_ReadDrivesStatus};
 const uint8_t StandardStatusCommCnt		= 3;
 
+extern fractional CurrentKCoeffs[];
 
 vs8 uart1RxBuffer[UART1_RxBufSz];
 vu16 statusReadyWait;
@@ -101,11 +102,11 @@ void UART1_Config(void)
 	
 //	IFS0bits.U1TXIF = 0;
 //	IEC0bits.U1TXIE = 1;				// UART1 Transmitter Interrupt Enable
-	IPC3bits.U1TXIP = 4;				// mid-range interrupt priority
+	IPC3bits.U1TXIP = 3;				// mid-range interrupt priority
 	IFS0bits.U1RXIF = 0;
-	IPC2bits.U1RXIP = 7;				// high interrupt priority
+	IPC2bits.U1RXIP = 6;				// high interrupt priority
 	IEC0bits.U1RXIE = 1;				// UART1 Receiver Interrupt Enable
-	IPC16bits.U1EIP = 6;				// UART1 Error Interrupt Enable
+	IPC16bits.U1EIP = 5;				// UART1 Error Interrupt Enable
 	IEC4bits.U1EIE = 1;				// UART1 Error Interrupt Enable
 	
 	U1STAbits.OERR=0;
@@ -283,6 +284,15 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 				else if(NFComBuf.SetDrivesMisc.data[0] & NF_DrivesMisc_SetSynchronized)
 					Enc.isSynchronized = 1;
 				NFComBuf.SetDrivesMisc.updated = 0;
+			}	
+			
+			// If SetCurrentRegulator command received...
+			if(NFComBuf.SetCurrentRegulator.updated != 0){
+				CurrentKCoeffs[0] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].p);
+				CurrentKCoeffs[1] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].i);
+				CurrentKCoeffs[2] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].d);
+				PID_CoeffsUpdate(1);
+				NFComBuf.SetCurrentRegulator.updated = 0;
 			}
 			
 			// If Interpreter found a query to be answered...
@@ -295,7 +305,7 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 						break;
 					}	
 				}
-				if(stndardStatusRequest == 1 && DataSynchronizer.synchronized == 0){
+				if(stndardStatusRequest == 1){
 					while(1){
 						if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
 							UART1_StandardStatusSend();

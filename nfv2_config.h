@@ -26,6 +26,10 @@
 	#define NF_BUFSZ_SetDrivesMisc			1
 	#define NF_BUFSZ_ReadDrivesStatus		1
 
+	#define NF_BUFSZ_SetCurrentRegulator	1
+//	#define NF_BUFSZ_SetSpeedRegulator		1
+//	#define NF_BUFSZ_SetPositionRegulator	1
+
 //	#define NF_BUFSZ_SetServosMode		4
 //	#define NF_BUFSZ_SetServosPosition	4
 //	#define NF_BUFSZ_SetServosSpeed		4
