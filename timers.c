@@ -42,7 +42,7 @@ void TIMER3_Config()
 							//  1:8		0b01
 							//  1:1		0b00
  	IFS0bits.T3IF = 0;      // Timer interrupt flag Reset 
-	IPC2bits.T3IP = 7;      // Timer Interrupt priority level
+	IPC2bits.T3IP = 6;      // Timer Interrupt priority level
  	IEC0bits.T3IE = 1;      // Timer interrupt Enable
  	TMR3 = 2020;  			// Initial Value
 	PR3 = 2000 * US_TO_PR34;			// Timer period register for T=2ms

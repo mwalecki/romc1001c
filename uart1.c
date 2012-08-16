@@ -104,7 +104,7 @@ void UART1_Config(void)
 //	IEC0bits.U1TXIE = 1;				// UART1 Transmitter Interrupt Enable
 	IPC3bits.U1TXIP = 3;				// mid-range interrupt priority
 	IFS0bits.U1RXIF = 0;
-	IPC2bits.U1RXIP = 6;				// high interrupt priority
+	IPC2bits.U1RXIP = 7;				// high interrupt priority
 	IEC0bits.U1RXIE = 1;				// UART1 Receiver Interrupt Enable
 	IPC16bits.U1EIP = 5;				// UART1 Error Interrupt Enable
 	IEC4bits.U1EIE = 1;				// UART1 Error Interrupt Enable
@@ -306,13 +306,13 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 					}	
 				}
 				if(stndardStatusRequest == 1){
-					while(1){
-						if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
+				//	while(1){
+				//		if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
 							UART1_StandardStatusSend();
 							DataSynchronizer.statusReady = 0;
-							break;
-						}	
-					}
+				//			break;
+				//		}	
+				//	}
 				}
 				else{
 					// Update status structure
