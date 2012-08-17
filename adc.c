@@ -121,9 +121,9 @@ int ADC_OvercurrentEmergencyStop()
 void __attribute__((interrupt, no_auto_psv)) _ADC1Interrupt(void)
 {
 	#ifdef PID_CASCADE
-		if(Params.mode == M_CURRENT || Params.mode == M_POSITION)
+		if(Params.mode == M_CURRENT || Params.mode == M_TEST_CURRENT || Params.mode == M_POSITION)
 	#else
-		if(Params.mode == M_CURRENT)
+		if(Params.mode == M_CURRENT || Params.mode == M_TEST_CURRENT)
 	#endif	
 		CurrentControl();
 	

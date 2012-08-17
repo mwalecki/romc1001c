@@ -229,6 +229,15 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 							Params.encZeroTrace = 1;
 						}
 						break;
+					case NF_DrivesMode_SYNC_CURRENT0:
+						// If there is no error...
+						if((Params.mode != M_ERROR) && !SW_EDGE1 && !SW_EDGE2){
+							ModeSwitch(M_CURRENT);
+							if(Params.encZeroTrace == 0 && Enc.isSynchronized == 1)
+								Enc.isSynchronized = 0;		// Allow resynchronization
+							Params.encZeroTrace = 1;
+						}
+						break;
 					default:
 						break;
 				}
@@ -305,14 +314,18 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 						break;
 					}	
 				}
-				if(stndardStatusRequest == 1){
-				//	while(1){
-				//		if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
-							UART1_StandardStatusSend();
-							DataSynchronizer.statusReady = 0;
-				//			break;
-				//		}	
-				//	}
+			//	if(stndardStatusRequest == 1){	// 16.08.2012
+			//	//	while(1){
+			//	//		if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
+			//				UART1_StandardStatusSend();
+			//				DataSynchronizer.statusReady = 0;
+			//	//			break;
+			//	//		}	
+			//	//	}
+			//	}
+				if(stndardStatusRequest == 1 && DataSynchronizer.statusReady == 1){	// 17.08.2012
+					UART1_StandardStatusSend();
+					DataSynchronizer.statusReady = 0;
 				}
 				else{
 					// Update status structure

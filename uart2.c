@@ -128,7 +128,7 @@ void UART2_SendNBytes(char *buf, u8 n)
 
 void UART2_Proc()
 {
-	u16 i=1000;
+	u16 i=1000, iter;
 	u8 addrTemp=0;
 	
 	static char interpBuf[UART2_INTERP_BUF_SZ];
@@ -139,7 +139,7 @@ void UART2_Proc()
 	Uart2.rxReady = 0;
 	
 	addrTemp = 10*(interpBuf[1]-0x30)+(interpBuf[2]-0x30);				// Address decoder
-	if(interpBuf[0]==':' && (u8)addrTemp == (u8)KEY_ADDRESS)
+	if(interpBuf[0]==':' && ((u8)addrTemp == (u8)KEY_ADDRESS || (u8)addrTemp == ADDR_BROADCAST))
 		iBufPt = interpBuf +3;
 	else
 		return;
@@ -176,6 +176,9 @@ void UART2_Proc()
 		else
 		_IF_MEMBER_THEN(iBufPt, ":POS", 4, 5)
 			ModeSwitch(M_POSITION);
+		else
+		_IF_MEMBER_THEN(iBufPt, ":TCUR", 5, 5)
+			ModeSwitch(M_TEST_CURRENT);
 	_ENDGROUP
 	else
 	_GROUP(iBufPt, ":PWM", 4)
@@ -233,6 +236,77 @@ void UART2_Proc()
 	else
 	_GROUP(iBufPt, ":XXX", 4)
 		PID_CoeffsUpdate(1);
+	_ENDGROUP
+	else
+	_GROUP(iBufPt, ":REC", 4)
+		_IF_MEMBER_THEN(iBufPt, ":REF?", 5, 4)
+		{
+			while(--i != 0);
+			for(iter=0; iter<RECORD_SAMPLES; iter++){
+				i = 10000;
+				while(--i != 0);
+				sprintf(interpBuf,"%d; ", Record.reference[iter]);
+				UART2_SendNBytes(interpBuf, strlen(interpBuf));
+			}
+			i = 10000;
+			while(--i != 0);
+			sprintf(interpBuf,"\r\n");
+			UART2_SendNBytes(interpBuf, strlen(interpBuf));
+		}
+		_IF_MEMBER_THEN(iBufPt, ":MEAS?", 6, 4)
+		{
+			while(--i != 0);
+			for(iter=0; iter<RECORD_SAMPLES; iter++){
+				i = 10000;
+				while(--i != 0);
+				sprintf(interpBuf,"%d; ", Record.measure[iter]);
+				UART2_SendNBytes(interpBuf, strlen(interpBuf));
+			}
+			i = 10000;
+			while(--i != 0);
+			sprintf(interpBuf,"\r\n");
+			UART2_SendNBytes(interpBuf, strlen(interpBuf));
+		}
+		else
+		_IF_MEMBER_THEN(iBufPt, ":OUT?", 5, 4)
+		{
+			while(--i != 0);
+			for(iter=0; iter<RECORD_SAMPLES; iter++){
+				i = 10000;
+				while(--i != 0);
+				sprintf(interpBuf,"%d; ", Record.output[iter]);
+				UART2_SendNBytes(interpBuf, strlen(interpBuf));
+			}
+			i = 10000;
+			while(--i != 0);
+			sprintf(interpBuf,"\r\n");
+			UART2_SendNBytes(interpBuf, strlen(interpBuf));
+		}
+	_ENDGROUP
+	else
+	_GROUP(iBufPt, ":LED", 4)
+		_IF_MEMBER_THEN(iBufPt, " ON", 3, 4)
+			Params.ledOverride = 1;
+		else
+		_IF_MEMBER_THEN(iBufPt, " OFF", 4, 4)
+			Params.ledOverride = 0;
+		else
+		_IF_MEMBER_THEN(iBufPt, ":SET", 4, 4){
+			if(Params.ledOverride)
+				LED_Set( 	((iBufPt[9+0]=='0') ? 0 : (1<<7) )| 
+							((iBufPt[9+1]=='0') ? 0 : (1<<6) )| 
+							((iBufPt[9+2]=='0') ? 0 : (1<<5) )| 
+							((iBufPt[9+3]=='0') ? 0 : (1<<4) )| 
+							((iBufPt[9+4]=='0') ? 0 : (1<<3) )| 
+							((iBufPt[9+5]=='0') ? 0 : (1<<2) )| 
+							((iBufPt[9+6]=='0') ? 0 : (1<<1) )| 
+							((iBufPt[9+7]=='0') ? 0 : (1<<0) ));
+		}
+		else
+		_IF_MEMBER_THEN(iBufPt, ":TAB", 4, 4){
+			if(Params.ledOverride)
+				LED_Set(iBufPt[9 + (u8)KEY_ADDRESS]);
+		}					
 	_ENDGROUP
 }
 

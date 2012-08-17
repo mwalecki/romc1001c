@@ -13,6 +13,9 @@ void LED_Proc()
 	
 	blink = 1-blink;
 	
+	if(Params.ledOverride)
+		return;
+		
 	if(Params.mode == M_ERROR)
 	{
 		if(blink)

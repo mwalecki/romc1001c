@@ -37,15 +37,11 @@
 #define RECORD_CURRENT
 //#define RECORD_POSITION
 
-#define RECORD_SAMPLES	1000
+#define RECORD_SAMPLES	500
 
 //####
-#ifdef RECORD_CURRENT 
+#if defined RECORD_CURRENT || defined RECORD_POSITION 
 	#define RECORD
-#else
-	#ifdef RECORD_POSITION 
-		#define RECORD
-	#endif
 #endif
 
 //########################################################################
@@ -78,17 +74,21 @@
 #define COMMAND_MASK_PARAM		0xf0
 
 // Params.mode
-#define M_MANUAL	0
-#define M_POSITION	1
-#define M_CURRENT	2
-#define M_PWM		3
-#define M_ERROR		4
-#define M_BOOT		5
+#define M_MANUAL		0
+#define M_POSITION		1
+#define M_CURRENT		2
+#define M_PWM			3
+#define M_ERROR			4
+#define M_BOOT			5
+#define M_TEST_CURRENT	6
 // Params.dir
 #define D_STOP		0
 #define D_FWD		1
 #define D_REV		-1
 // 
+
+#define ADDR_BROADCAST 99
+
 #define vu8	volatile unsigned char
 
 typedef union{
@@ -117,9 +117,11 @@ typedef struct{
 	u8	coeffValid;
 	u8	encZeroTrace;
 	s16	maxCurrent;
+	u8	ledOverride;
 } PARAMS_St;
 
 typedef struct{
+	s16 reference[RECORD_SAMPLES];
 	s16 measure[RECORD_SAMPLES];
 	s16 output[RECORD_SAMPLES];
 	u16 index;

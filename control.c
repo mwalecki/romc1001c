@@ -101,6 +101,14 @@ inline void MOTOR_Control()	// Called in timer1 interrupt, timers.c
 		case M_CURRENT:
 			referenceCurrent = Reference->current; 
 			break;
+		case M_TEST_CURRENT:
+			#ifdef RECORD_CURRENT
+				if(Record.index < (RECORD_SAMPLES / 2))
+					referenceCurrent = Reference->current; 
+				else
+					referenceCurrent = 0; 
+			#endif
+			break;
 		case M_ERROR:
 			referenceCurrent = 0;
 			MOTOR_PwmSet(0);
@@ -151,6 +159,14 @@ inline void CurrentControl()	// Called in ADC interrupt, adc.c
 {
 	static s16 deviation;
 	s16 s16temp;
+	static s16 prevReferenceCurrent = 0;
+	
+	#define RECORD_TH 1000
+	
+	if((prevReferenceCurrent < RECORD_TH && referenceCurrent >= RECORD_TH) || (prevReferenceCurrent > -RECORD_TH && referenceCurrent <= -RECORD_TH))
+		Record.index = 0;
+	
+	prevReferenceCurrent = referenceCurrent;
 	
 	if(referenceCurrent > 1000*CURRENT_LIMIT)
 		s16temp = 1000*CURRENT_LIMIT;
@@ -181,6 +197,7 @@ inline void CurrentControl()	// Called in ADC interrupt, adc.c
 	#ifdef RECORD_CURRENT
 	if(Record.index < RECORD_SAMPLES)
 	{
+		Record.reference[Record.index] = referenceCurrent;
 		Record.measure[Record.index] = ADC_Current();
 		Record.output[Record.index] = CurrentPID.controlOutput;
 		Record.index++;
