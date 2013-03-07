@@ -82,9 +82,9 @@ u8 ledOn;
 // Axis name																		TFG		CONV													TFG		TRACK
 // Driver card address				0		1		2		3		4		5		6		7		8		9		A		B		C		D		E		F
 // Current sensor LEM				HX15-P	HX15-P	HX15-P	HX15-P	HX15-P	HX15-P	HX15-P	HX03-P	HX15-P	HX15-P	HX15-P	HX15-P	HX15-P	HX15-P	HX03-P	HX15-P	
-// R50 [Ohm]						1k		1k		1k		1k		1k		1k		0		1k		1k		1k		1k		1k		1k		1k		0		1k
-// R53 [Ohm]						1k		1k		1k		1k		1k		1k		10k		1k		1k		1k		1k		1k		1k		1k		10k		1k
-const float	ADCVAL_TO_I_COEFF[]={	12.3,	12.3,	12.3,	12.3,	12.3,	12.3,	0.332,	12.3,	12.3,	12.3,	12.3,	12.3,	12.3,	12.3,	0.332,	12.3	};
+// R50 [Ohm]						1k		1k		1k		1k		1k		0		0		1k		1k		1k		1k		1k		1k		0		0		1k
+// R53 [Ohm]						1k		1k		1k		1k		1k		10k		10k		1k		1k		1k		1k		1k		1k		10k		10k		1k
+const float	ADCVAL_TO_I_COEFF[]={	12.3,	12.3,	12.3,	12.3,	12.3,	0.332,	0.332,	12.3,	12.3,	12.3,	12.3,	12.3,	12.3,	0.332,	0.332,	12.3	};
 const int	ADC_CURRENT_INSEN[]={	10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10,		10		};
 const u8	ENC_AB_SWAP[]={			0,		0,		0,		0,		0,		0,		0,		0,		1,		0,		0,		0,		1,		1,		1,		0		};
 const u8	ENC_I_POLARITY[]={		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0,		0		};

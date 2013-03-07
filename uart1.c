@@ -212,12 +212,14 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 						// If there is no error...
 						if((Params.mode != M_ERROR) && !SW_EDGE1 && !SW_EDGE2){
 							ModeSwitch(M_PWM);
+							Params.encZeroTrace = 0;
 						}	
 						break;
 					case NF_DrivesMode_CURRENT:
 						// If there is no error...
 						if((Params.mode != M_ERROR) && !SW_EDGE1 && !SW_EDGE2){
 							ModeSwitch(M_CURRENT);
+							Params.encZeroTrace = 0;
 						}	
 						break;
 					case NF_DrivesMode_SYNC_PWM0:

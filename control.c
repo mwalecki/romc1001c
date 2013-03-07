@@ -2,6 +2,8 @@
 #include "nfv2.h"
 
 extern PARAMS_St Params;
+extern REFERENCE_Un	ReferenceA;
+extern REFERENCE_Un	ReferenceB;
 extern REFERENCE_Un* Reference;
 extern s16 referenceCurrent;
 extern RECORD_St Record;
@@ -214,26 +216,31 @@ inline void ModeSwitch(u8 mode)
 	switch(mode)
 	{
 		case M_MANUAL:
-			Reference->largest = 0;
+			ReferenceA.largest = 0;
+			ReferenceB.largest = 0;
 		break;
 		case M_POSITION:
-			Reference->position = ENC_Position();
+			ReferenceA.position = ENC_Position();
+			ReferenceB.position = ENC_Position();
 		break;
 		case M_ERROR:
 			ER_STOP=1;
 			ST_Reset(ST_ErStop);
-			Reference->largest = 0;
+			ReferenceA.largest = 0;
+			ReferenceB.largest = 0;
 		//	Enc.isSynchronized = 0;
 		break;
 		case M_BOOT:
 			ER_STOP=1;
 			ST_Reset(ST_ErStop);
-			Reference->largest = 0;
+			ReferenceA.largest = 0;
+			ReferenceB.largest = 0;
 		//	Enc.isSynchronized = 0;
 			LED_Set(0b11111111, 0);
 		break;
 		default:
-			Reference->largest = 0;
+			ReferenceA.largest = 0;
+			ReferenceB.largest = 0;
 			Status->overcurrent = 0;
 		break;
 	}	
