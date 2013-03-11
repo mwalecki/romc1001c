@@ -4,8 +4,7 @@
 #include "encoder.h"
 #include "control.h"
 #include "keyb.h"
-#include "nfv2.h"
-#include "mycrc.h"
+#include "nf/nfv2.h"
 
 extern SYNCHRONIZER_St	DataSynchronizer;
 extern PARAMS_St Params;
@@ -111,7 +110,6 @@ void UART1_Config(void)
 	
 	U1STAbits.OERR=0;
 	
-	crcInit();
 	NF_ComBufReset(&NFComBuf);
 	NFComBuf.myAddress = (u8)KEY_ADDRESS;
 	
@@ -299,9 +297,9 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 			
 			// If SetCurrentRegulator command received...
 			if(NFComBuf.SetCurrentRegulator.updated != 0){
-				CurrentKCoeffs[0] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].p);
-				CurrentKCoeffs[1] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].i);
-				CurrentKCoeffs[2] = Q15((float)NFComBuf.SetCurrentRegulator.data[0].d);
+				CurrentKCoeffs[0] = NFComBuf.SetCurrentRegulator.data[0].p;
+				CurrentKCoeffs[1] = NFComBuf.SetCurrentRegulator.data[0].i;
+				CurrentKCoeffs[2] = NFComBuf.SetCurrentRegulator.data[0].d;
 				PID_CoeffsUpdate(1);
 				NFComBuf.SetCurrentRegulator.updated = 0;
 			}

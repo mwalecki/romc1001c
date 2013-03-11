@@ -1,5 +1,5 @@
 #include "reset.h"
-#include "nfv2.h"
+#include "nf/nfv2.h"
 
 extern NF_STRUCT_ComBuf NFComBuf; 
 

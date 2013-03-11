@@ -1,0 +1,3 @@
+[submodule "nf"]
+	path = nf
+	url = git://github.com/mwalecki/nf.git

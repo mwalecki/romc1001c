@@ -35,7 +35,7 @@
 #include "timers.h"
 #include "reset.h"
 #include "mycrc.h"
-#include "nfv2.h"
+#include "nf/nfv2.h"
 
 //##                                      #### ######## ################ GLOBALS
 
@@ -139,8 +139,7 @@ int main()
 	
 	
 	CLOCK_Config();
-	
-	crcInit();
+	NFv2_CrcInit();
 	KEYB_Config();
 	LED_Config();
 	DMA0_UART2TX_Config();

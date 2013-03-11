@@ -1,5 +1,5 @@
 #include "control.h"
-#include "nfv2.h"
+#include "nf/nfv2.h"
 
 extern PARAMS_St Params;
 extern REFERENCE_Un	ReferenceA;

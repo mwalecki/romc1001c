@@ -3,7 +3,7 @@
 #include "encoder.h"
 #include "control.h"
 #include "keyb.h"
-#include "nfv2.h"
+#include "nf/nfv2.h"
 
 extern PARAMS_St Params;
 extern UART_St	Uart2;
