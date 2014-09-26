@@ -15,7 +15,7 @@
 #define ST_Reset(n)			STDownCnt[n].val=STDownCnt[n].period
 
 #define US_TO_PR34						5
-#define STATUS_WRITE_TO_READ_PRECED_US	200
+#define STATUS_WRITE_TO_READ_PRECED_US	1000
 #define MAX_CORR_PREC_CNT				10
 #define PREC_CNT_HIST_L					4
 #define PREC_CNT_HIST_H					6

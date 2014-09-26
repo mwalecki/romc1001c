@@ -85,7 +85,7 @@ inline void TIMER4_MeasureStatusReadInterval()
 	else
 	{
 		measure = currentRead - lastRead;
-		if (measure > 1500 * US_TO_PR34 && measure < 2500 * US_TO_PR34)
+		if (measure > 1500 * US_TO_PR34 && measure < 3000 * US_TO_PR34)
 		{
 			if (measure < PR3)
 				PR3 --;
@@ -100,8 +100,8 @@ inline void TIMER4_MeasureStatusReadInterval()
 	else if(DataSynchronizer.lastPrecedenceUs > (STATUS_WRITE_TO_READ_PRECED_US + 5))
 		TMR3 -= 5*US_TO_PR34;
 	
-	if(DataSynchronizer.lastPrecedenceUs > (STATUS_WRITE_TO_READ_PRECED_US - 50)
-	&& DataSynchronizer.lastPrecedenceUs < (STATUS_WRITE_TO_READ_PRECED_US + 50))
+	if(DataSynchronizer.lastPrecedenceUs > (STATUS_WRITE_TO_READ_PRECED_US - 750)
+	&& DataSynchronizer.lastPrecedenceUs < (STATUS_WRITE_TO_READ_PRECED_US + 750))
 	{
 		if(DataSynchronizer.correctPrecedCnt < MAX_CORR_PREC_CNT)
 			DataSynchronizer.correctPrecedCnt ++;
@@ -114,8 +114,10 @@ inline void TIMER4_MeasureStatusReadInterval()
 	
 	if(DataSynchronizer.correctPrecedCnt > PREC_CNT_HIST_H)
 		DataSynchronizer.synchronized = 1;
-	else if(DataSynchronizer.correctPrecedCnt < PREC_CNT_HIST_L)
+	else if(DataSynchronizer.correctPrecedCnt < PREC_CNT_HIST_L){
 		DataSynchronizer.synchronized = 0;
+		
+	}
 	
 	
 	

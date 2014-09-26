@@ -308,12 +308,13 @@ void __attribute__ ((interrupt, no_auto_psv)) _U1RXInterrupt(void)
 			if(commCnt > 0){
 				uint8_t stndardStatusRequest = 1;
 				int i = 0;
-				for(; i < commCnt; i++){
+			/*	for(; i < commCnt; i++){
 					if((commArray[i] != NF_COMMAND_ReadDrivesPosition) && (commArray[i] != NF_COMMAND_ReadDrivesCurrent) && (commArray[i] != NF_COMMAND_ReadDrivesStatus)){
 						stndardStatusRequest = 0;
 						break;
 					}	
-				}
+				}*/
+				stndardStatusRequest = 0;
 			//	if(stndardStatusRequest == 1){	// 16.08.2012
 			//	//	while(1){
 			//	//		if(DataSynchronizer.statusReady == 1 || DataSynchronizer.synchronized == 0){
